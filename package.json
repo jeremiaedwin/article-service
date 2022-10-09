@@ -1,0 +1,11 @@
+{
+  "name": "article-api",
+  "version": "1.0.0",
+  "description": "API Provider for Article Processing",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "M Hafizh A",
+  "license": "ISC"
+}
