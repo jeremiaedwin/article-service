@@ -16,8 +16,6 @@ const upload = require("express-fileupload");
 // Use Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const publicDirectoryPath = path.join(__dirname, "public");
-app.use(express.static(publicDirectoryPath));
 app.use(cors());
 app.use(upload());
 
