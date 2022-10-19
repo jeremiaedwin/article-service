@@ -5,4 +5,3 @@ List API :
 2. Update Article (PATCH) → .../api/article
 
 - Kelompok : B2
-- Repository Made By : M Hafizh Auliansyah (211511047)
