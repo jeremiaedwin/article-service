@@ -5,13 +5,13 @@
     Description : Main starter of article api, setting of the server
 */
 // Import Module
-const path = require("path");
-const express = require("express");
-var bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
-const router = require("./src/routes");
-const cors = require("cors");
-const upload = require("express-fileupload");
+const cors = require('cors');
+const upload = require('express-fileupload');
+const router = require('./src/routes');
 
 // Use Middleware
 app.use(express.json());
@@ -20,10 +20,10 @@ app.use(cors());
 app.use(upload());
 
 // Use Routing
-app.use("/api", router);
-app.use("/public", express.static("public"));
+app.use('/api', router);
+app.use('/public', express.static('public'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log("Server is up on port " + port);
+  console.log(`Server is up on port ${port}`);
 });
