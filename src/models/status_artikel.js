@@ -8,6 +8,11 @@ const TS = {
   },
 };
 const DataArticle = new Schema({
+  id_status_komentar: {
+    type: String,
+    unqiue: true,
+    require: true,
+  },
   nama_status_artikel: {
     type: String,
     require: true,

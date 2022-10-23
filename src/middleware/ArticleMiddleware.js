@@ -1,4 +1,4 @@
-const DataArticle = require('../models/article');
+const DataArticle = require('../models/artikel');
 
 async function GetData(req, res, next) {
   let articleData;
