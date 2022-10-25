@@ -62,7 +62,6 @@ const DataArticle = new Schema({
   waktu_selesai: {
     type: Date,
   },
-  TS,
-});
+}, TS);
 
 module.exports = mongoose.model('artikel', DataArticle);

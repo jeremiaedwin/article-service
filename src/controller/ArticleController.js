@@ -7,7 +7,6 @@ async function edit(req, res) {
       const newFile = req.files.cover_artikel;
       const newFileName = res.artikel.id_artikel + path.extname(newFile);
       const existedPath = req.body.cover_artikel;
-      l;
     }
     if (req.body.judul_artikel != null) {
       res.artikel.juduL_artikel = req.body.judul_artikel;

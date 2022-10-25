@@ -17,7 +17,6 @@ const DataArticle = new Schema({
     type: String,
     require: true,
   },
-  TS,
-});
+}, TS);
 
 module.exports = mongoose.model('status_artikel', DataArticle);
