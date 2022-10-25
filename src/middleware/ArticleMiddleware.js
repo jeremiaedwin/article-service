@@ -10,7 +10,7 @@ async function GetData(req, res, next) {
   } catch (err) {
     return res.status(500).send({ message: err.message });
   }
-  res.sim = articleData;
+  res.artikel = articleData;
   next();
 }
 

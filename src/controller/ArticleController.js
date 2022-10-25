@@ -1,13 +1,31 @@
+const path = require('path');
+
 async function edit(req, res) {
-  if (req.body.kategori != null) res.sim.kategori = req.body.kategori;
-  if (req.files.cover != null) {
-    const PathFile = '/media/';
-    res.sim.cover = PathFile;
+  try {
+    if (req.files.cover_artikel != null) {
+      // TODO File Upload
+      const newFile = req.files.cover_artikel;
+      const newFileName = res.artikel.id_artikel + path.extname(newFile);
+      const existedPath = req.body.cover_artikel;
+      l;
+    }
+    if (req.body.judul_artikel != null) {
+      res.artikel.juduL_artikel = req.body.judul_artikel;
+    }
+    if (req.body.isi_artikel != null) {
+      res.artikel.isi_artikel = req.body.isi_artikel;
+    }
+    if (req.body.deskripsi_artikel != null) {
+      res.artikel.deskripsi_artikel = req.body.deskripsi_artikel;
+    }
+    if (req.body.tag_artikel != null) {
+      res.artikel.tag_artikel = req.body.tag_artikel;
+    }
+    const updatedData = await res.artikel.save();
+    res.status(200).send(updatedData);
+  } catch (err) {
+    res.status(400).json({ message: err.message, status: 'Error' });
   }
-  if (req.body.judul != null) res.sim.judul = req.body.judul;
-  if (req.body.isi != null) res.sim.isi = req.body.isi;
-  if (req.body.deksripsi != null) res.sim.deksripsi = req.body.deksripsi;
-  if (req.body.tag != null) res.sim.tag = req.body.tag;
 }
 
 module.exports = {
