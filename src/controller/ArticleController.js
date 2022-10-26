@@ -1,12 +1,14 @@
 const path = require('path');
+const fs = require('fs');
 
 async function edit(req, res) {
   try {
     if (req.files.cover_artikel != null) {
       // TODO File Upload
+      const coverPath = 'public/image/';
       const newFile = req.files.cover_artikel;
+      const existedPath = coverPath + res.artikel.cover_artikel;
       const newFileName = res.artikel.id_artikel + path.extname(newFile);
-      const existedPath = req.body.cover_artikel;
     }
     if (req.body.judul_artikel != null) {
       res.artikel.juduL_artikel = req.body.judul_artikel;

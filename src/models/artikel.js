@@ -47,6 +47,9 @@ const DataArticle = new Schema({
   isi_artikel: {
     type: String,
   },
+  catatan_editor: {
+    type: String,
+  },
   waktu_draft: {
     type: Date,
   },
