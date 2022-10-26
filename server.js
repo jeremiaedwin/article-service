@@ -11,6 +11,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const upload = require('express-fileupload');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const router = require('./src/routes');
 
 // Use Middleware
@@ -20,7 +24,7 @@ app.use(cors());
 app.use(upload());
 
 // Use Routing
-app.use('/api', router);
+app.use('/', router);
 app.use('/public', express.static('public'));
 
 const port = process.env.PORT || 3000;

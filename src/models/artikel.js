@@ -32,19 +32,19 @@ const DataArticle = new Schema({
     type: Number,
     ref: 'akses_komentar',
   },
+  id_tag: {
+    type: Array,
+  },
   cover_artikel: {
     type: String,
   },
   juduL_artikel: {
     type: String,
   },
-  isi_artikel: {
-    type: String,
-  },
   deskripsi_artikel: {
     type: String,
   },
-  tag_artikel: {
+  isi_artikel: {
     type: String,
   },
   waktu_draft: {
@@ -64,4 +64,4 @@ const DataArticle = new Schema({
   },
 }, TS);
 
-module.exports = mongoose.model('artikel', DataArticle);
+module.exports = mongoose.model('artikel', DataArticle, 'artikel');
