@@ -4,8 +4,8 @@ const router = express.Router();
 const ArticleController = require('../controller/ArticleController');
 const ArticleMiddleware = require('../middleware/ArticleMiddleware');
 
-router.patch('/', ArticleMiddleware.GetData, async (req, res) => {
-  ArticleController.edit(req, res);
+router.patch('/:id', ArticleMiddleware.GetData, async (req, res) => {
+  ArticleController.update(req, res);
 });
 
 module.exports = router;

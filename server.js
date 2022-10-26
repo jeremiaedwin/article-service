@@ -15,13 +15,21 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const { LimitSizeFile } = require('./src/middleware/ArticleMiddleware');
 const router = require('./src/routes');
 
 // Use Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(upload());
+app.use(upload({
+  limits: {
+    fileSize: 10000000, // Limit 10 mb size
+  },
+  limitHandler: LimitSizeFile,
+  abortOnLimit: true,
+  createParentPath: true,
+}));
 
 // Use Routing
 app.use('/', router);
