@@ -34,8 +34,8 @@ async function update(req, res) {
     if (req.body.id_kategori != null) {
       res.artikel.id_kategori = req.body.id_kategori;
     }
-    if (req.body.status_artikel != null) {
-      res.artikel.status_artikel = req.body.status_artikel;
+    if (req.body.id_status_artikel != null) {
+      res.artikel.id_status_artikel = req.body.id_status_artikel;
     }
     if (req.body.akses_baca != null) {
       res.artikel.akses_baca = req.body.akses_baca;
