@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs').promises;
+const Article = require('../models/artikel');
 
 async function update(req, res) {
   try {
@@ -80,6 +81,54 @@ async function update(req, res) {
   }
 }
 
+async function GetArticleDraft(req, res) {
+  let dataArticle;
+  let userId;
+  try {
+    userId = 'USR0000000003';
+    dataArticle = await Article.find({ id_status_artikel: 1, id_user: userId });
+    if (dataArticle[0] == null) {
+      return res.json({
+        status: 'Error',
+        message: 'Article not found',
+      }, 404);
+    }
+    return res.json({
+      status: 'success',
+      data: dataArticle,
+    });
+  } catch (error) {
+    return res.json({
+      status: 'Error',
+      message: 'Failed to get Data',
+    }, 500);
+  }
+}
+
+async function GetArticleDraftbyId(req, res) {
+  let dataArticle;
+  try {
+    dataArticle = await Article.findOne({ id_artikel: req.params.id });
+    if (dataArticle == null) {
+      return res.json({
+        status: 'Error',
+        message: 'Article not found',
+      }, 404);
+    }
+    return res.json({
+      status: 'success',
+      data: dataArticle,
+    }, 200);
+  } catch (error) {
+    return res.json({
+      status: 'Error',
+      message: 'Failed to get Data',
+    }, 500);
+  }
+}
+
 module.exports = {
   update,
+  GetArticleDraft,
+  GetArticleDraftbyId,
 };
