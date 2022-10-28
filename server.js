@@ -7,21 +7,25 @@
 // Import Module
 const express = require('express');
 const bodyParser = require('body-parser');
-
-const app = express();
+const path = require('path');
 const cors = require('cors');
 const upload = require('express-fileupload');
 const dotenv = require('dotenv');
 
+const app = express();
+
 dotenv.config();
 
 const { LimitSizeFile } = require('./src/middleware/ArticleMiddleware');
-const router = require('./src/routes');
+
+const corsOptions = {
+  origin: '*',
+};
 
 // Use Middleware
-app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(bodyParser.json());
+app.use(cors(corsOptions));
 app.use(upload({
   limits: {
     fileSize: 10000000, // Limit 10 mb size
@@ -30,10 +34,14 @@ app.use(upload({
   abortOnLimit: true,
   createParentPath: true,
 }));
+// Public dir
+app.use('/public', express.static('public'));
+app.use('/artikel-media', express.static(path.join(__dirname, 'public', 'images', 'artikel-media')));
 
 // Use Routing
+const router = require('./src/routes');
+
 app.use('/', router);
-app.use('/public', express.static('public'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
