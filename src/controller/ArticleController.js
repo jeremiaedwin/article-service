@@ -1,6 +1,8 @@
 const fs = require('fs').promises;
 const fsSync = require('fs');
 const path = require('path');
+const Article = require('../models/artikel');
+const DataArticle = require('../models/artikel');
 
 async function update(req, res) {
   try {
@@ -121,7 +123,79 @@ async function UploadMedia(req, res) {
   }
 }
 
+async function hapus(req, res) {
+  try {
+    await res.artikel.remove();
+    return res.status(200).json({ message: 'Success Delete' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}
+
+async function post(req, res) {
+  try {
+    const newData = new DataArticle({
+      id_artikel: 'A0000000000',
+      id_status_artikel: 1,
+    });
+    const savedData = await newData.save();
+    return res.status(200).send(savedData);
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+}
+
+async function GetArticleDraft(req, res) {
+  let dataArticle;
+  let userId;
+  try {
+    userId = 'USR0000000003';
+    dataArticle = await Article.find({ id_status_artikel: 1, id_user: userId });
+    if (dataArticle[0] == null) {
+      return res.json({
+        status: 'Error',
+        message: 'Article not found',
+      }, 404);
+    }
+    return res.json({
+      status: 'success',
+      data: dataArticle,
+    });
+  } catch (error) {
+    return res.json({
+      status: 'Error',
+      message: 'Failed to get Data',
+    }, 500);
+  }
+}
+
+async function GetArticleDraftbyId(req, res) {
+  let dataArticle;
+  try {
+    dataArticle = await Article.findOne({ id_artikel: req.params.id });
+    if (dataArticle == null) {
+      return res.json({
+        status: 'Error',
+        message: 'Article not found',
+      }, 404);
+    }
+    return res.json({
+      status: 'success',
+      data: dataArticle,
+    }, 200);
+  } catch (error) {
+    return res.json({
+      status: 'Error',
+      message: 'Failed to get Data',
+    }, 500);
+  }
+}
+
 module.exports = {
   update,
   UploadMedia,
+  post,
+  hapus,
+  GetArticleDraft,
+  GetArticleDraftbyId,
 };
