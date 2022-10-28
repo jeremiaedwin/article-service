@@ -161,6 +161,8 @@ async function UploadMedia(req, res) {
 
 async function deleteArticle(req, res) {
   try {
+    const targetPathDir = path.join('public', 'images', 'artikel-media', req.params.id);
+    fsSync.rmSync(targetPathDir, { recursive: true, force: true });
     await res.artikel.remove();
     return res.status(200).json({ message: 'Success Delete' });
   } catch (err) {
