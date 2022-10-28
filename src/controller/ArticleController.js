@@ -127,8 +127,51 @@ async function GetArticleDraftbyId(req, res) {
   }
 }
 
+function getDigit(n) {
+  let count = 0;
+  let number = n;
+  while (number > 0) {
+    number = Math.floor(n / 10);
+    count += 1;
+  }
+  return count;
+}
+
+async function GetNewId(req, res) {
+  let dataArticle;
+  let stringID;
+  let incrementID;
+  let lengthOfIDNumber;
+  let newIdNumber = '0';
+  let newIdArticle = 'ART';
+  try {
+    dataArticle = await Article.find().limit(1).sort({ $natural: -1 });
+    stringID = dataArticle[0].id_artikel.split('T');
+    // eslint-disable-next-line prefer-destructuring
+    incrementID = stringID[1];
+    // eslint-disable-next-line no-unused-vars
+    incrementID = parseInt(incrementID, 10) + 1;
+    lengthOfIDNumber = getDigit(incrementID);
+    for (let i = 9; i > lengthOfIDNumber; i -= 1) {
+      newIdNumber += '0';
+    }
+    newIdNumber += incrementID;
+    newIdArticle += newIdNumber;
+    console.log(newIdNumber);
+    return res.json({
+      data: newIdArticle,
+    });
+  } catch (error) {
+    return res.json({
+      status: 'Error',
+      message: 'Failed to get Data',
+    }, 500);
+  }
+}
+
 module.exports = {
   update,
   GetArticleDraft,
   GetArticleDraftbyId,
+  GetNewId,
 };

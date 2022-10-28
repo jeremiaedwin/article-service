@@ -15,4 +15,8 @@ router.get('/draft', async (req, res) => {
 router.get('/draft/:id', async (req, res) => {
   ArticleController.GetArticleDraftbyId(req, res);
 });
+
+router.get('/getNewId', async (req, res) => {
+  ArticleController.GetNewId(req, res);
+});
 module.exports = router;
