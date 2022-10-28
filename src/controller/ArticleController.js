@@ -82,23 +82,61 @@ async function update(req, res) {
   }
 }
 
-async function hapus(req, res){
-  try{
-    await res.artikel.remove();
-    return res.status(200).json({message:"Success Delete"});
-  } catch(err){
-    return res.status(500).json({message : err.message});
+function getDigit(n) {
+  let count = 0;
+  let number = n;
+  while (number > 0) {
+    number = Math.floor(n / 10);
+    count += 1;
+  }
+  return count;
+}
+
+async function GetNewId() {
+  let dataArticle;
+  let stringID;
+  let incrementID;
+  let lengthOfIDNumber;
+  let newIdNumber = '0';
+  let newIdArticle = 'ART';
+  try {
+    dataArticle = await Article.find().limit(1).sort({ $natural: -1 });
+    stringID = dataArticle[0].id_artikel.split('T');
+    // eslint-disable-next-line prefer-destructuring
+    incrementID = stringID[1];
+    // eslint-disable-next-line no-unused-vars
+    incrementID = parseInt(incrementID, 10) + 1;
+    lengthOfIDNumber = getDigit(incrementID);
+    for (let i = 9; i > lengthOfIDNumber; i -= 1) {
+      newIdNumber += '0';
+    }
+    newIdNumber += incrementID;
+    newIdArticle += newIdNumber;
+    return newIdArticle;
+  } catch (error) {
+    return 'Cannot generate new article ID';
   }
 }
 
-async function post(req, res){
+async function deleteArticle(req, res) {
   try {
-    let newData = new DataArticle({
-      id_artikel : 'A0000000000' ,
-      id_status_artikel : 1
+    await res.artikel.remove();
+    return res.status(200).json({ message: 'Success Delete' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}
+
+async function createArticle(req, res) {
+  let artikelId;
+  try {
+    artikelId = await GetNewId();
+    const newData = new DataArticle({
+      id_artikel: artikelId,
+      id_status_artikel: 1,
     });
-   const savedData = await newData.save();
-   return res.status(200).send(savedData);
+    const savedData = await newData.save();
+    return res.status(200).send(savedData);
   } catch (err) {
     return res.status(500).send({ message: err.message });
   }
@@ -150,52 +188,10 @@ async function GetArticleDraftbyId(req, res) {
   }
 }
 
-function getDigit(n) {
-  let count = 0;
-  let number = n;
-  while (number > 0) {
-    number = Math.floor(n / 10);
-    count += 1;
-  }
-  return count;
-}
-
-async function GetNewId(req, res) {
-  let dataArticle;
-  let stringID;
-  let incrementID;
-  let lengthOfIDNumber;
-  let newIdNumber = '0';
-  let newIdArticle = 'ART';
-  try {
-    dataArticle = await Article.find().limit(1).sort({ $natural: -1 });
-    stringID = dataArticle[0].id_artikel.split('T');
-    // eslint-disable-next-line prefer-destructuring
-    incrementID = stringID[1];
-    // eslint-disable-next-line no-unused-vars
-    incrementID = parseInt(incrementID, 10) + 1;
-    lengthOfIDNumber = getDigit(incrementID);
-    for (let i = 9; i > lengthOfIDNumber; i -= 1) {
-      newIdNumber += '0';
-    }
-    newIdNumber += incrementID;
-    newIdArticle += newIdNumber;
-    console.log(newIdNumber);
-    return res.json({
-      data: newIdArticle,
-    });
-  } catch (error) {
-    return res.json({
-      status: 'Error',
-      message: 'Failed to get Data',
-    }, 500);
-  }
-}
-
 module.exports = {
   update,
-  post,
-  hapus,
+  createArticle,
+  deleteArticle,
   GetArticleDraft,
   GetArticleDraftbyId,
   GetNewId,
