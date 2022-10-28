@@ -38,7 +38,7 @@ const DataArticle = new Schema({
   cover_artikel: {
     type: String,
   },
-  juduL_artikel: {
+  judul_artikel: {
     type: String,
   },
   deskripsi_artikel: {

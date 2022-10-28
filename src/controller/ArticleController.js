@@ -1,5 +1,6 @@
-const path = require('path');
 const fs = require('fs').promises;
+const fsSync = require('fs');
+const path = require('path');
 const Article = require('../models/artikel');
 const DataArticle = require('../models/artikel');
 
@@ -36,8 +37,8 @@ async function update(req, res) {
     if (req.body.id_kategori != null) {
       res.artikel.id_kategori = req.body.id_kategori;
     }
-    if (req.body.status_artikel != null) {
-      res.artikel.status_artikel = req.body.status_artikel;
+    if (req.body.id_status_artikel != null) {
+      res.artikel.id_status_artikel = req.body.id_status_artikel;
     }
     if (req.body.akses_baca != null) {
       res.artikel.akses_baca = req.body.akses_baca;
@@ -78,7 +79,7 @@ async function update(req, res) {
     const updatedData = await res.artikel.save();
     return res.status(200).send(updatedData);
   } catch (err) {
-    return res.status(400).json({ message: err.message, status: 'Error' });
+    return res.status(400).json({ message: err.message });
   }
 }
 
@@ -115,6 +116,46 @@ async function GetNewId() {
     return newIdArticle;
   } catch (error) {
     return 'Cannot generate new article ID';
+  }
+}
+
+async function UploadMedia(req, res) {
+  try {
+    if (req.files) {
+      const fileUpload = req.files.upload;
+      let newFileName = fileUpload.name;
+      let targetPathDir = path.join('public', 'images', 'artikel-media', req.params.id);
+      const extensionName = path.extname(fileUpload.name).toLowerCase();
+      const allowedExtension = ['.png', '.jpg', '.jpeg', '.JPG', '.JPEG'];
+      if (!allowedExtension.includes(extensionName)) {
+        return res.status(415).send({ message: "Extension file doesn't allowed" });
+      }
+      // Process image naming
+      try {
+        if (!fsSync.existsSync(targetPathDir)) {
+          fsSync.mkdirSync(targetPathDir);
+        }
+        const contentDir = await fs.readdir(targetPathDir);
+        const countFile = contentDir.length + 1;
+        newFileName = `${req.params.id}_${countFile.toString()}`;
+        newFileName += extensionName;
+      } catch (err) {
+        return res.status(500).send({ message: err.message });
+      }
+      // Upload Image
+      targetPathDir = path.join(targetPathDir, newFileName);
+      try {
+        fileUpload.mv(targetPathDir);
+        return res.status(200).json({
+          uploaded: true,
+          url: `${process.env.APP_URL}:${process.env.PORT}/artikel-media/${req.params.id}/${newFileName}`,
+        });
+      } catch (err) {
+        return res.status(500).json({ message: err.message });
+      }
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 }
 
@@ -195,4 +236,5 @@ module.exports = {
   GetArticleDraft,
   GetArticleDraftbyId,
   GetNewId,
+  UploadMedia,
 };
