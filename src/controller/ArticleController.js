@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs').promises;
 const Article = require('../models/artikel');
+const DataArticle = require('../models/artikel');
 
 async function update(req, res) {
   try {
@@ -81,6 +82,28 @@ async function update(req, res) {
   }
 }
 
+async function hapus(req, res){
+  try{
+    await res.artikel.remove();
+    return res.status(200).json({message:"Success Delete"});
+  } catch(err){
+    return res.status(500).json({message : err.message});
+  }
+}
+
+async function post(req, res){
+  try {
+    let newData = new DataArticle({
+      id_artikel : 'A0000000000' ,
+      id_status_artikel : 1
+    });
+   const savedData = await newData.save();
+   return res.status(200).send(savedData);
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+}
+
 async function GetArticleDraft(req, res) {
   let dataArticle;
   let userId;
@@ -129,6 +152,8 @@ async function GetArticleDraftbyId(req, res) {
 
 module.exports = {
   update,
+  post,
+  hapus,
   GetArticleDraft,
   GetArticleDraftbyId,
 };
